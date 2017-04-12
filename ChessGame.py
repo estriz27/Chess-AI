@@ -1,7 +1,7 @@
 from Chessnut import Game
 from ChessBoard import *
-
-
+import time
+import random
     
 chessgame = Game()
 board = ChessBoard(8,8)
@@ -20,6 +20,13 @@ print(board)
  'g1h3', 'g1f3']
 """
 
+def checkStatus():
+    if chessgame.status == 1:
+        print("CHECK")
+    if chessgame.status == 2:
+        print("CHECKMATE")
+    if chessgame.status ==3:
+        print("STALEMATE")
 
 def printplayer():
     if chessgame.state[0] == 'w':
@@ -27,7 +34,7 @@ def printplayer():
     else:
         return "Black"
 
-while chessgame.status !=2:
+while chessgame.status !=2 or chessgame.status != 3:
 
     print(printplayer())
     move = input("move: ")
@@ -35,7 +42,16 @@ while chessgame.status !=2:
     board.updateBoard(str(chessgame))
     print(board)
 
-if chessgame.status == 2:
-    print("CHECKMATE")
+    checkStatus()
+
+
+    print("Thinking...")
+    time.sleep(3)
+    move = random.choice(chessgame.get_moves())
+    chessgame.apply_move(move)
+    board.updateBoard(str(chessgame))
+    print(board)
+
+    
     
 
