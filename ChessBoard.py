@@ -65,7 +65,8 @@ class ChessBoard:
     def updateBoard(self,string):
         piecesString = self.parseString(string)
         self.readPieces(piecesString)
-        
+
+
 
 
 

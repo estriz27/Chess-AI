@@ -6,7 +6,10 @@ from ChessBoard import *
 chessgame = Game()
 board = ChessBoard(8,8)
 board.updateBoard(str(chessgame))
+
+print("Welcome to Chess AI")
 print(board)
+
 
 #print(chessgame)  # 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 
@@ -17,12 +20,22 @@ print(board)
  'g1h3', 'g1f3']
 """
 
-chessgame.apply_move('e2e4')  # succeeds!
-board.updateBoard(str(chessgame))
-print(board)
-#print(chessgame)  # 'rnbqkbnr/ pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1'
 
-chessgame.apply_move('b7b6')  # fails! (raises InvalidMove exception)
+def printplayer():
+    if chessgame.state[0] == 'w':
+        return "White"
+    else:
+        return "Black"
 
-board.updateBoard(str(chessgame))
-print(board)
+while chessgame.status !=2:
+
+    print(printplayer())
+    move = input("move: ")
+    chessgame.apply_move(move) 
+    board.updateBoard(str(chessgame))
+    print(board)
+
+if chessgame.status == 2:
+    print("CHECKMATE")
+    
+
