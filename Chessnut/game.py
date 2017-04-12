@@ -14,8 +14,8 @@ chess rules.
 
 from collections import namedtuple
 
-from board import Board
-from moves import MOVES
+from Chessnut.board import Board
+from Chessnut.moves import MOVES
 
 # Define a named tuple with FEN field names to hold game state information
 State = namedtuple('State', ['player', 'rights', 'en_passant', 'ply', 'turn'])
