@@ -11,12 +11,13 @@ class Game_Engine():
 
     def prompt_user(self):
         #TO COMPLETE
+        pass
 
 class AI():
     def __init__(self, game, max_depth=3, leaf_nodes=[], num_nodes=0):
         self.game = game
         self.max_depth = max_depth
-        self.leaf_nodes = #TO COMPLETE
+        self.leaf_nodes = leaf_nodes #TO COMPLETE
         self.num_nodes = num_nodes
         #add more about caches here
 
