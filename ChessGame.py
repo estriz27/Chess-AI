@@ -35,7 +35,7 @@ def printplayer():
         return "Black"
 
 
-#print all the moves with print(chessgame.get_moves('b'))
+#print all the moves with print(chessgame.get_moves('b'))  player is (chessgame.state.player)
 #while chessgame.status !=2 or chessgame.status != 3:
 #
 #    print(printplayer())
