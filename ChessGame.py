@@ -50,7 +50,7 @@ def printplayer():
         return "Black"
 
 
-<<<<<<< HEAD
+
 #print all the moves with print(chessgame.get_moves('b'))  player is (chessgame.state.player)
 #while chessgame.status !=2 or chessgame.status != 3:
 #
@@ -71,22 +71,4 @@ def printplayer():
 #    print(board)
 
     
-    
-
-=======
-    print(printplayer())
-    move = input("move: ")
-    chessgame.apply_move(move)
-    board.updateBoard(str(chessgame))
-    print(board)
-
-    checkStatus()
-
-
-    print("Thinking...")
-    time.sleep(3)
-    move = random.choice(chessgame.get_moves())
-    chessgame.apply_move(move)
-    board.updateBoard(str(chessgame))
-    print(board)
->>>>>>> 6244c8f4d06e05cd742b56361106d17dbd94dccc
+ 
