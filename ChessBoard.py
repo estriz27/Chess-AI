@@ -15,10 +15,13 @@ class ChessBoard:
         counter = 8
         s = ''   # the string to return
         for row in range(self.height):
-            s += str(counter) + '|'+ ''  # add the spacer character
+            s += str(counter) + '|'   # add the spacer character
             counter -=1
             for col in range(self.width):
-                s += self.data[row][col] + '|'
+                if self.data[row][col] == ' ':
+                    s += self.data[row][col] + '|'
+                else:
+                    s += self.data[row][col] + '|'
         
             s += '\n'
             
@@ -35,9 +38,6 @@ class ChessBoard:
 
 
     def readPieces(self,string):
-        alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-        black = "abcdefghijklmnopqrstuvwxyz"
-        spaces = "0123456789"
         counter = 0
         
         
@@ -52,20 +52,38 @@ class ChessBoard:
                 
             
     def parseString(self, string):
-        alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-        black = "abcdefghijklmnopqrstuvwxyz"
+
         spaces = "0123456789"
         newstr = string.replace("/", "")
         for x in newstr:
             if x in spaces:
                 replaceStr = int(x)*' '
                 newstr = newstr.replace(x, replaceStr)
+        newstr = newstr[0:64]
         return newstr
 
+    def convertToImage(self,string):
+        symbolString = ''
+
+        PIECE_SYMBOLS = {'P': '♟', 'B': '♝','N': '♞','R': '♜','Q': '♛','K': '♚','p': '♙','b': '♗','n': '♘','r': '♖','q': '♕','k': '♔', ' ': ' '}
+        for x in string:
+            symbolString += PIECE_SYMBOLS[x]
+        return symbolString
+        
     def updateBoard(self,string):
+ #       piecesString = self.convertToImage(self.parseString(string))
         piecesString = self.parseString(string)
         self.readPieces(piecesString)
 
+
+    def lookupPiece(self,string):
+        letters = ['a','b','c','d','e','f','g','h']
+        index1 = 8-int(string[1])
+        index2 = int(letters.index(string[0]))
+        if self.data[index1][index2] == ' ':
+            return 0
+        else:
+            return self.data[index1][index2]
 
 
 
