@@ -60,7 +60,7 @@ def printplayer():
         return "Black"
 
 ################################### start pseudo code (won't work) #########
-    
+
 ##def maxi(depth):
 ##    if depth == 0:
 ##        return evaluate()
@@ -70,7 +70,7 @@ def printplayer():
 ##        if( score > maxi):
 ##            maxi = score
 ##    return maxi
-## 
+##
 ##def mini(depth):
 ##    if depth == 0:
 ##        return -evaluate()
@@ -106,14 +106,14 @@ def printplayer():
 ##        pass
 ##    else:
 ##        bestMove = random.choice(goodMovesArray)
-##    
+##
 ##    if str(bestMove) == '0':
 ##        bestMove = random.choice(chessgame.get_moves())
 ##    print('the best move selected is ' + str(bestMove) + '\n')
 ##    return str(bestMove)
 ##
 ##def bestMoveLocation():
-    
+
 ################################## end pseudo code (won't work) #############
 
 
@@ -121,16 +121,16 @@ def findBestMove():
 
     global board
     global chessgame
-    
+
     piece_values = {'p': 1, 'b': 3, 'n': 3, 'r': 5, 'q': 9, 'k': 200, ' ': 0}
-    
+
     # finds all possible moves at moment for playerColor (black or white)
     # returns an array of every move you can possible make at the moment
     # each array element is of the form 'e2e4' where the first two characters are where you ar moving from
     # and the second two characters are where you are moving to
-    
+
     possible_moves = chessgame.get_moves('b')
-    
+
     # parse what is on each of the spaces in possible_moves (piece or no piece)
     # possible_moves example = ['e2e4', 'f2f4', etc]
     # check in second half of string if empty space or piece
@@ -173,7 +173,7 @@ def findBestMove():
         pass
     else:
         bestMove = random.choice(goodMovesArray)
-    
+
     if str(bestMove) == '0':
         bestMove = random.choice(chessgame.get_moves())
     print('the best move selected is ' + str(bestMove) + '\n')
@@ -188,10 +188,17 @@ while chessgame.status !=2 or chessgame.status != 3:
     print(printplayer())
     move = input("move: ")
     #error handling for invalid move (ie. n2n3)
-    column = move[2]
-    row = move[3]
-    if column > 'g' or row > '8':
+    ourPossibleMoves = chessgame.get_moves('w')
+    if move in ourPossibleMoves:
+        pass
+    elif len(move) > 4:
         move = input("Enter a valid move: ")
+    else:
+        move = input("Enter a valid move: ")
+    # column = move[2]
+    # row = move[3]
+    # if column > 'g' or row > '8':
+    #     move = input("Enter a valid move: ")
     chessgame.apply_move(move)
     board.updateBoard(str(chessgame))
     turn_counter += 1
