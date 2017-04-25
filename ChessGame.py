@@ -73,12 +73,12 @@ def findBestMove(board, chessgame):
     #updates dictionary
     moves_dict = {} #{'e2e4': 0, 'f4f5': 3 ...}
     for move in possible_moves:
-        print(move) # 'b8a6'
+        #print(move) # 'b8a6'
         space_moving_to = move[2:] # 'a6'
-        print('this is space_moving_to: ' + space_moving_to)
+        #print('this is space_moving_to: ' + space_moving_to)
         piece = board.lookupPiece(space_moving_to) #string
         piece = piece.lower()
-        print(piece)
+        #print('piece: ', str(piece))
         pieceValue = piece_values[piece] #int
         moves_dict[move] = pieceValue  #dictionary['new_key'] = value
 
@@ -91,7 +91,7 @@ def findBestMove(board, chessgame):
             maxValue = moves_dict[key]
     print('keyOfAMaxValue: ' + str(maxKey))
     if str(maxKey) == '0':
-        print('DOES IT GET HERE?')
+        #print('DOES IT GET HERE?')
         maxKey = random.choice(chessgame.get_moves())
     return str(maxKey)
 
@@ -102,6 +102,11 @@ while chessgame.status !=2 or chessgame.status != 3:
 
     print(printplayer())
     move = input("move: ")
+    #error handling for invalid move (ie. n2n3)
+    column = move[2]
+    row = move[3]
+    if column > 'g' or row > '8':
+        move = input("Enter a valid move: ")
     chessgame.apply_move(move)
     board.updateBoard(str(chessgame))
     print(board)
@@ -113,7 +118,7 @@ while chessgame.status !=2 or chessgame.status != 3:
     ############### SCREWS UP HERE ##################
     move = findBestMove(board, chessgame)
     #######move = random.choice(chessgame.get_moves())
-    print('got past findbestMove!')
+    #print('got past findbestMove!')
     print(move) ##### move should look something like this 'd7d6'
     chessgame.apply_move(move)
     board.updateBoard(str(chessgame))
