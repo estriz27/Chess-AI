@@ -52,7 +52,7 @@ def printplayer():
 
 
 def findBestMove(board, chessgame):
-    piece_values = {'p': 1, 'b': 3, 'n': 3, 'r': 5, 'q': 9, 'k': 0, '0': 0}
+    piece_values = {'p': 1, 'b': 3, 'n': 3, 'r': 5, 'q': 9, 'k': 0, ' ': 0}
   	# finds all possible moves at moment for playerColor (black or white)
     # returns an array of every move you can possible make at the moment
     # each array element is of the form 'e2e4' where the first two characters are where you ar moving from
@@ -75,7 +75,9 @@ def findBestMove(board, chessgame):
     for move in possible_moves:
         print(move) # 'b8a6'
         space_moving_to = move[2:] # 'a6'
+        print('this is space_moving_to: ' + space_moving_to)
         piece = board.lookupPiece(space_moving_to) #string
+        piece = piece.lower()
         print(piece)
         pieceValue = piece_values[piece] #int
         moves_dict[move] = pieceValue  #dictionary['new_key'] = value
@@ -88,7 +90,8 @@ def findBestMove(board, chessgame):
             maxKey = key
             maxValue = moves_dict[key]
     print('keyOfAMaxValue: ' + str(maxKey))
-    if maxKey == '0':
+    if str(maxKey) == '0':
+        print('DOES IT GET HERE?')
         maxKey = random.choice(chessgame.get_moves())
     return str(maxKey)
 
@@ -105,11 +108,13 @@ while chessgame.status !=2 or chessgame.status != 3:
 
     checkStatus()
 
-
     print("Thinking...")
     #time.sleep(3)
+    ############### SCREWS UP HERE ##################
     move = findBestMove(board, chessgame)
-    print(move)
+    #######move = random.choice(chessgame.get_moves())
+    print('got past findbestMove!')
+    print(move) ##### move should look something like this 'd7d6'
     chessgame.apply_move(move)
     board.updateBoard(str(chessgame))
     print(board)

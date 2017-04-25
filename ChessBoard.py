@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 class ChessBoard:
 
     def __init__(self, width, height):
@@ -81,8 +84,10 @@ class ChessBoard:
         index1 = 8-int(string[1])
         index2 = int(letters.index(string[0]))
         if self.data[index1][index2] == ' ':
-            return 0
+            print('we are about to return a (space)!')
+            return ' '
         else:
+            print(self.data[index1][index2])
             return self.data[index1][index2]
 
 
