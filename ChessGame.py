@@ -191,14 +191,9 @@ while chessgame.status !=2 or chessgame.status != 3:
     ourPossibleMoves = chessgame.get_moves('w')
     if move in ourPossibleMoves:
         pass
-    elif len(move) > 4:
+    while move not in ourPossibleMoves:
         move = input("Enter a valid move: ")
-    else:
-        move = input("Enter a valid move: ")
-    # column = move[2]
-    # row = move[3]
-    # if column > 'g' or row > '8':
-    #     move = input("Enter a valid move: ")
+        
     chessgame.apply_move(move)
     board.updateBoard(str(chessgame))
     turn_counter += 1
