@@ -3,8 +3,6 @@ from ChessBoard import *
 import time
 import random
 
-
-
 # class Game_Engine():
 #     def __init__(self, board_state):
 #         self.game = Game(board_state)
@@ -22,11 +20,22 @@ import random
 #         self.num_nodes = num_nodes
 #         #add more about caches here
 
-chessgame = Game()
+
+################ GLOBAL VARIABLES ########################################
+
 board = ChessBoard(8,8)
+## chessgame = Game() # use this for a NEW GAME, use a fen generator for testing
+chessgame = Game(fen='rnbqkbnr/p1pppppp/8/1p6/2P5/8/PP1PPPPP/RNBQKBNR w KQkq b6 0 2')
+
+
+##chessgame = Game(fen='rnbqkbnr/p1pppppp/8/1p6/2P5/8/PP1PPPPP/RNBQKBNR w KQkq b6 0 2')
+##board = ChessBoard(8,8)
 board.updateBoard(str(chessgame))
+turn_counter = 0
 
 print("Welcome to Chess AI")
+print('player is white (capital letters on bototm of board), AI is black (lowercase letters on top of board\n')
+print('Turn ' + str(turn_counter) + '\n')
 print(board)
 
 """
@@ -50,14 +59,78 @@ def printplayer():
     else:
         return "Black"
 
+################################### start pseudo code (won't work) #########
+    
+##def maxi(depth):
+##    if depth == 0:
+##        return evaluate()
+##    maxi = float('inf')
+##    for ( all moves):
+##        score = mini( depth - 1 )
+##        if( score > maxi):
+##            maxi = score
+##    return maxi
+## 
+##def mini(depth):
+##    if depth == 0:
+##        return -evaluate()
+##    mini = float('inf')
+##    for ( all moves):
+##        score = maxi( depth - 1 )
+##        if( score < mini ):
+##            mini = score
+##    return mini;
+##
+##def evaluate():
+##    global board
+##    #updates dictionary
+##    moves_dict = {} # {'e2e4': 0, 'f4f5': 3 ...}
+##    for move in possible_moves:
+##        space_moving_to = move[2:] # 'a6'
+##        piece = board.lookupPiece(space_moving_to) #string
+##        piece = piece.lower()
+##        pieceValue = piece_values[piece] #int
+##        moves_dict[move] = pieceValue  #dictionary['new_key'] = value
+##    print('the move dictionary (key is space and value is piece value of space) is: ' + str(moves_dict) + '\n')
+##
+##    #find key of max value in dictionary
+##    bestMove = 0 #returns ie. 'e2e4'
+##    goodMovesArray = []
+##    for key in moves_dict:
+##        maxValue = 0
+##        if moves_dict[key] > maxValue:
+##            goodMovesArray += [key]
+##            maxValue = moves_dict[key]
+##    print('the array of good moves is ' + str(goodMovesArray) + '\n')
+##    if not goodMovesArray:
+##        pass
+##    else:
+##        bestMove = random.choice(goodMovesArray)
+##    
+##    if str(bestMove) == '0':
+##        bestMove = random.choice(chessgame.get_moves())
+##    print('the best move selected is ' + str(bestMove) + '\n')
+##    return str(bestMove)
+##
+##def bestMoveLocation():
+    
+################################## end pseudo code (won't work) #############
 
-def findBestMove(board, chessgame):
-    piece_values = {'p': 1, 'b': 3, 'n': 3, 'r': 5, 'q': 9, 'k': 0, ' ': 0}
-  	# finds all possible moves at moment for playerColor (black or white)
+
+def findBestMove():
+
+    global board
+    global chessgame
+    
+    piece_values = {'p': 1, 'b': 3, 'n': 3, 'r': 5, 'q': 9, 'k': 200, ' ': 0}
+    
+    # finds all possible moves at moment for playerColor (black or white)
     # returns an array of every move you can possible make at the moment
     # each array element is of the form 'e2e4' where the first two characters are where you ar moving from
     # and the second two characters are where you are moving to
+    
     possible_moves = chessgame.get_moves('b')
+    
     # parse what is on each of the spaces in possible_moves (piece or no piece)
     # possible_moves example = ['e2e4', 'f2f4', etc]
     # check in second half of string if empty space or piece
@@ -70,34 +143,46 @@ def findBestMove(board, chessgame):
   	stats = {'a':1000, 'b':3000, 'c': 100}
   	max(stats.iteritems(), key=operator.itemgetter(1))[0]
     '''
+
+    ############################### 1-PLY #####################################
+##    evaluation = 0
+##    evaluation = maxi(0)
+
+    ######## everything below here in this function is basically the "evaluate()" function needed above....
+
     #updates dictionary
-    moves_dict = {} #{'e2e4': 0, 'f4f5': 3 ...}
+    moves_dict = {} # {'e2e4': 0, 'f4f5': 3 ...}
     for move in possible_moves:
-        #print(move) # 'b8a6'
         space_moving_to = move[2:] # 'a6'
-        #print('this is space_moving_to: ' + space_moving_to)
         piece = board.lookupPiece(space_moving_to) #string
         piece = piece.lower()
-        #print('piece: ', str(piece))
         pieceValue = piece_values[piece] #int
         moves_dict[move] = pieceValue  #dictionary['new_key'] = value
+    print('the move dictionary (key is space and value is piece value of space) is: ' + str(moves_dict) + '\n')
 
     #find key of max value in dictionary
-    maxKey = 0 #returns ie. 'e2e4'
+    bestMove = 0 #returns ie. 'e2e4'
+    goodMovesArray = []
     for key in moves_dict:
         maxValue = 0
         if moves_dict[key] > maxValue:
-            maxKey = key
+            goodMovesArray += [key]
             maxValue = moves_dict[key]
-    print('keyOfAMaxValue: ' + str(maxKey))
-    if str(maxKey) == '0':
-        #print('DOES IT GET HERE?')
-        maxKey = random.choice(chessgame.get_moves())
-    return str(maxKey)
+    print('the array of good moves is ' + str(goodMovesArray) + '\n')
+    if not goodMovesArray:
+        pass
+    else:
+        bestMove = random.choice(goodMovesArray)
+    
+    if str(bestMove) == '0':
+        bestMove = random.choice(chessgame.get_moves())
+    print('the best move selected is ' + str(bestMove) + '\n')
+    return str(bestMove)
 
 
 
 #print all the moves with print(chessgame.get_moves('b'))  player is (chessgame.state.player)
+# MAIN GAME LOOP
 while chessgame.status !=2 or chessgame.status != 3:
 
     print(printplayer())
@@ -109,17 +194,21 @@ while chessgame.status !=2 or chessgame.status != 3:
         move = input("Enter a valid move: ")
     chessgame.apply_move(move)
     board.updateBoard(str(chessgame))
+    turn_counter += 1
+    print('\nTurn ' + str(turn_counter) + ' - white (player) moved\n')
     print(board)
 
     checkStatus()
 
-    print("Thinking...")
+    print("Thinking...\n")
     #time.sleep(3)
     ############### SCREWS UP HERE ##################
-    move = findBestMove(board, chessgame)
+    move = findBestMove()
     #######move = random.choice(chessgame.get_moves())
-    #print('got past findbestMove!')
-    print(move) ##### move should look something like this 'd7d6'
+    ##print('got past findbestMove!')
+    ##print(move) ##### move should look something like this 'd7d6'
     chessgame.apply_move(move)
     board.updateBoard(str(chessgame))
+    turn_counter += 1
+    print('Turn ' + str(turn_counter) + ' - black (AI) moved\n')
     print(board)

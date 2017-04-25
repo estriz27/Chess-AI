@@ -11,7 +11,7 @@ class ChessBoard:
         self.data = [[' '] * width for row in range(height)]
 
 
-
+    
     def __repr__(self):
         """ Returns a string representation for an object of type Board.
         """
@@ -25,8 +25,9 @@ class ChessBoard:
                     s += self.data[row][col] + '|'
                 else:
                     s += self.data[row][col] + '|'
-
+        
             s += '\n'
+            
 
         s = s + ' ' + ('-' + ('-'*2*self.width) + '\n')
 
@@ -41,14 +42,18 @@ class ChessBoard:
 
     def readPieces(self,string):
         counter = 0
-
-
+        
+        
         for row in range(8):
             for col in range(8):
                 self.data[row][col] = string[counter]
                 counter +=1
-
-
+                
+                    
+                
+        
+                
+            
     def parseString(self, string):
 
         spaces = "0123456789"
@@ -67,7 +72,7 @@ class ChessBoard:
         for x in string:
             symbolString += PIECE_SYMBOLS[x]
         return symbolString
-
+        
     def updateBoard(self,string):
  #       piecesString = self.convertToImage(self.parseString(string))
         piecesString = self.parseString(string)
@@ -79,8 +84,13 @@ class ChessBoard:
         index1 = 8-int(string[1])
         index2 = int(letters.index(string[0]))
         if self.data[index1][index2] == ' ':
-            #print('we are about to return a (space)!')
+            ##print('we are about to return a (space)!')
             return ' '
         else:
-            print(self.data[index1][index2])
+            ##print(self.data[index1][index2])
             return self.data[index1][index2]
+
+
+
+
+
