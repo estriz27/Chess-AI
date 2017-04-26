@@ -178,7 +178,21 @@ def findBestMove():
 
 
 def lookahead(player):
-    print(chessgame.get_moves(player))
+    secondLayerMoves = {}
+    currentFen = chessgame.get_fen()
+    for move in chessgame.get_moves(player):
+        secondLayerMoves[move] = []
+
+    for move in chessgame.get_moves(player):
+        chessgame.apply_move(move)
+        print(board)
+        secondLayerMoves[move] += chessgame.get_moves(player)
+        chessgame.set_fen(currentFen)
+    
+    return secondLayerMoves
+        
+        
+        
 
 
 
@@ -223,4 +237,4 @@ def runGame():
         print('Turn ' + str(turn_counter) + ' - black (AI) moved\n')
         print(board)
 
-runGame()
+
