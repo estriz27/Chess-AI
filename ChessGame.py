@@ -31,12 +31,9 @@ chessgame = Game(fen='rnbqkbnr/p1pppppp/8/1p6/2P5/8/PP1PPPPP/RNBQKBNR w KQkq b6 
 ##chessgame = Game(fen='rnbqkbnr/p1pppppp/8/1p6/2P5/8/PP1PPPPP/RNBQKBNR w KQkq b6 0 2')
 ##board = ChessBoard(8,8)
 board.updateBoard(str(chessgame))
-turn_counter = 0
 
-print("Welcome to Chess AI")
-print('player is white (capital letters on bototm of board), AI is black (lowercase letters on top of board\n')
-print('Turn ' + str(turn_counter) + '\n')
-print(board)
+
+
 
 """
 --iniitial moves--
@@ -180,37 +177,50 @@ def findBestMove():
     return str(bestMove)
 
 
+def lookahead(player):
+    print(chessgame.get_moves(player))
 
-#print all the moves with print(chessgame.get_moves('b'))  player is (chessgame.state.player)
-# MAIN GAME LOOP
-while chessgame.status !=2 or chessgame.status != 3:
 
-    print(printplayer())
-    move = input("move: ")
-    #error handling for invalid move (ie. n2n3)
-    ourPossibleMoves = chessgame.get_moves('w')
-    if move in ourPossibleMoves:
-        pass
-    while move not in ourPossibleMoves:
-        move = input("Enter a valid move: ")
-        
-    chessgame.apply_move(move)
-    board.updateBoard(str(chessgame))
-    turn_counter += 1
-    print('\nTurn ' + str(turn_counter) + ' - white (player) moved\n')
+
+def runGame():
+    turn_counter = 0
+    print("Welcome to Chess AI")
+    print('player is white (capital letters on bototm of board), AI is black (lowercase letters on top of board\n')
+    print('Turn ' + str(turn_counter) + '\n')
     print(board)
 
-    checkStatus()
+    #print all the moves with print(chessgame.get_moves('b'))  player is (chessgame.state.player)
+    # MAIN GAME LOOP
+    while chessgame.status !=2 or chessgame.status != 3:
 
-    print("Thinking...\n")
-    #time.sleep(3)
-    ############### SCREWS UP HERE ##################
-    move = findBestMove()
-    #######move = random.choice(chessgame.get_moves())
-    ##print('got past findbestMove!')
-    ##print(move) ##### move should look something like this 'd7d6'
-    chessgame.apply_move(move)
-    board.updateBoard(str(chessgame))
-    turn_counter += 1
-    print('Turn ' + str(turn_counter) + ' - black (AI) moved\n')
-    print(board)
+        print(printplayer())
+        move = input("move: ")
+        #error handling for invalid move (ie. n2n3)
+        ourPossibleMoves = chessgame.get_moves('w')
+        if move in ourPossibleMoves:
+            pass
+        while move not in ourPossibleMoves:
+            move = input("Enter a valid move: ")
+            
+        chessgame.apply_move(move)
+        board.updateBoard(str(chessgame))
+        turn_counter += 1
+        print('\nTurn ' + str(turn_counter) + ' - white (player) moved\n')
+        print(board)
+
+        checkStatus()
+
+        print("Thinking...\n")
+        #time.sleep(3)
+        ############### SCREWS UP HERE ##################
+        move = findBestMove()
+        #######move = random.choice(chessgame.get_moves())
+        ##print('got past findbestMove!')
+        ##print(move) ##### move should look something like this 'd7d6'
+        chessgame.apply_move(move)
+        board.updateBoard(str(chessgame))
+        turn_counter += 1
+        print('Turn ' + str(turn_counter) + ' - black (AI) moved\n')
+        print(board)
+
+runGame()
