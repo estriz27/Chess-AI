@@ -135,17 +135,27 @@ def findBestMove():
 
 
 
-def lookahead(player):
+def lookAhead(player):
+    #create dictionary for 2-ply moves
     secondLayerMoves = {}
-    currentFen = chessgame.get_fen()
-    for move in chessgame.get_moves(player):
-        secondLayerMoves[move] = []
 
+    currentFen = chessgame.get_fen()
+
+    for move in chessgame.get_moves(player):
+        #each current move is going to be a key for the above dictionary
+        secondLayerMoves[move] = []
+    #print(secondLayerMoves)
+    #print('--------------------------1----------------------------------')
     for move in chessgame.get_moves(player):
         chessgame.apply_move(move)
-        secondLayerMoves[move] += chessgame.get_moves(player)
+        opponent = player
+        if player == 'b':
+            opponent = 'w'
+        else:
+            opponent = 'b'
+        secondLayerMoves[move] += chessgame.get_moves(opponent)
         chessgame.set_fen(currentFen)
-
+    #print(secondLayerMoves)
     return secondLayerMoves
 
 
@@ -176,8 +186,9 @@ def runGame():
 
     #print all the moves with print(chessgame.get_moves('b'))  player is (chessgame.state.player)
     # MAIN GAME LOOP
+    #while not checkmate or stalemate
     while chessgame.status !=2 or chessgame.status != 3:
-
+        #----------------------HUMAN MOVE-------------------------
         print(printplayer())
         move = input("move: ")
 
@@ -188,18 +199,36 @@ def runGame():
         while move not in ourPossibleMoves:
             move = input("Enter a valid move: ")
 
+        #white player (user) makes move
         chessgame.apply_move(move)
+        board.updateBoard(str(chessgame))
+
+        #----------------------AI MOVE-------------------------
+        #after user makes move, AI needs to lookAhead
+        #AI is the black player
+        lookAhead('b')
+
+        print('--------------------2----------------------')
         currFen = chessgame.get_fen()
-        lookAheadFen = chessgame.get_fen()
-        lookAheadFen = list(lookAheadFen)
+        print("current: ", currFen)
+        #everything's working up until this point
 
-        lookAheadFen[-13] = 'w'
-        lookAheadFen = "".join(lookAheadFen)
-        chessgame.set_fen(lookAheadFen)
-        HumanNextMoves = lookahead('w')
-        chessgame.set_fen(currFen)
+        #this handles setting humanNextMoves
+        # lookAheadFen = chessgame.get_fen() #user's fen if user's move is made
+        # print("lookAhead: ", lookAheadFen)
+        # lookAheadFen = list(lookAheadFen)
+        # print(lookAheadFen)
+        # lookAheadFen[-13] = 'w' #sets player from black to white
+        # print(lookAheadFen)
+        # lookAheadFen = "".join(lookAheadFen)  #recreates fen
+        # print(lookAheadFen)
+        # chessgame.set_fen(lookAheadFen)
+        #
+        # HumanNextMoves = lookAhead('w')
+        # chessgame.set_fen(currFen)
 
-        AINextMoves = lookahead('b')
+
+        AINextMoves = lookAhead('b')
         board.updateBoard(str(chessgame))
         turn_counter += 1
         print('\nTurn ' + str(turn_counter) + ' - white (player) moved\n')
