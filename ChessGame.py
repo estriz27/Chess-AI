@@ -1,5 +1,7 @@
 from Chessnut import Game
 from ChessBoard import *
+import chessGUI as GUI
+import tkinter as tk
 import time
 import random
 
@@ -191,12 +193,10 @@ def lookahead(player):
     
     return secondLayerMoves
         
-        
-        
-
 
 
 def runGame():
+
     turn_counter = 0
     print("Welcome to Chess AI")
     print('player is white (capital letters on bototm of board), AI is black (lowercase letters on top of board\n')
@@ -206,7 +206,7 @@ def runGame():
     #print all the moves with print(chessgame.get_moves('b'))  player is (chessgame.state.player)
     # MAIN GAME LOOP
     while chessgame.status !=2 or chessgame.status != 3:
-
+        
         print(printplayer())
         move = input("move: ")
         #error handling for invalid move (ie. n2n3)
@@ -215,6 +215,8 @@ def runGame():
             pass
         while move not in ourPossibleMoves:
             move = input("Enter a valid move: ")
+
+
             
         chessgame.apply_move(move)
         board.updateBoard(str(chessgame))
@@ -236,5 +238,6 @@ def runGame():
         turn_counter += 1
         print('Turn ' + str(turn_counter) + ' - black (AI) moved\n')
         print(board)
+
 
 
