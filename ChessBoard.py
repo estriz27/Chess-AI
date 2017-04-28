@@ -42,8 +42,6 @@ class ChessBoard:
 
     def readPieces(self,string):
         counter = 0
-        
-        
         for row in range(8):
             for col in range(8):
                 self.data[row][col] = string[counter]
@@ -74,7 +72,6 @@ class ChessBoard:
         return symbolString
         
     def updateBoard(self,string):
- #       piecesString = self.convertToImage(self.parseString(string))
         piecesString = self.parseString(string)
         self.readPieces(piecesString)
 
