@@ -242,7 +242,7 @@ def runGame():
         #call minimax HERE
         for move in ourPossibleMoves:  
             originNode = Node(move)
-            for key in HumanNextMoves:  ##WHAT DOES THIS DO?
+            for key in HumanNextMoves:  ##WHAT DOES THIS DO? Please look
                 originNode.children = HumanNextMoves[key]  ###WHAT IS THE PURPOSE OF THIS LINE. Should it not be +=?
             originNode.setIsLeaf() #sets isLeaf equal to false because has children
             #minimax(originMove, depthLevel, maximizingPlayer)
