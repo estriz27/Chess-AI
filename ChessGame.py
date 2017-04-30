@@ -10,7 +10,7 @@ from Node import Node
 
 board = ChessBoard(8,8)
 ## chessgame = Game() # use this for a NEW GAME, use a fen generator for testing
-chessgame = Game(fen='rnbqkbnr/p1pppppp/8/1p6/2P5/8/PP1PPPPP/RNBQKBNR w KQkq b6 0 2')
+chessgame = Game()
 
 HumanNextMoves = {}
 AINextMoves = {}
@@ -45,36 +45,30 @@ def printplayer():
 
 
 def minimax(node, depth, maximizingPlayer):
-
     if depth == 0 or node.leaf == True:
-        heuristicValue = findBestMove()
+        heuristicValue = findBestMove()  #best move for what player?
         return heuristicValue
 
     #maximizingPlayer -AI
     if maximizingPlayer:
         bestValue = -1 * float('inf')
         for child in node.children:
-            v = minimax(child, depth-1, False)
+            v = minimax(Node(child), depth-1, False)
             bestValue = max(bestValue,v)
-        return bestValue
 
     #minimizingPlayer- human
     else:
         bestValue = float('inf')
         for child in node.children:
-            v = minimax(child, depth-1, True)
+            v = minimax(Node(child), depth-1, True)
             bestValue = min(bestValue,v)
-        return bestValue
+
+    return bestValue
 
 
 #this function is simply a heuristic to get the move with the highest point value
 #won't be used if we're using minimax
 def findBestMove():
-
-    global board
-    global chessgame
-
- 
 
     # finds all possible moves at moment for playerColor (black or white)
     # returns an array of every move you can possible make at the moment
@@ -112,12 +106,12 @@ def findBestMove():
         pieceValue = piece_values[piece] #int
         moves_dict[move] = pieceValue  #dictionary['new_key'] = value
     #print('the move dictionary (key is space and value is piece value of space) is: ' + str(moves_dict) + '\n')
-
+    
     #find key of max value in dictionary
     bestMove = 0 #returns ie. 'e2e4'
     goodMovesArray = []
+    maxValue = 0
     for key in moves_dict:
-        maxValue = 0
         if moves_dict[key] > maxValue:
             goodMovesArray += [key]
             maxValue = moves_dict[key]
@@ -156,17 +150,12 @@ def lookAhead(player):
     return secondLayerMoves
 
 def changeFenWB(lookAheadFen):
-         if lookAheadFen[-13] == 'b':
-             lookAheadFen[-13] = 'w'
-         elif lookAheadFen[-12] == 'b':
-             lookAheadFen[-12] = 'w'
-         elif lookAheadFen[-11] == 'b':
-             lookAheadFen[-11] = 'w'
-         elif lookAheadFen[-14] == 'b':
-             lookAheadFen[-14] = 'w'
-         elif lookAheadFen[-10] == 'b':
-             lookAheadFen[-10] = 'w'
-         return lookAheadFen
+    for x in range(5,20):
+        if lookAheadFen[-x] == 'b' and lookAheadFen[-x+1] == ' ' and lookAheadFen[-x-1] == ' ':
+            lookAheadFen[-x] = 'w'
+            break
+    return lookAheadFen
+  
      
 
 def findMoveBasedonValue(bestValue, player):
@@ -193,7 +182,7 @@ def runGame():
     turn_counter = 0
     print("Welcome to Chess AI")
     print('player is white (capital letters on bottom of board), AI is black (lowercase letters on top of board\n')
-    print('Instructions: \nAt your turn enter move as: \ncurrent position + next position (i.e. e2e4) [piece moves from e2 to e4] \n\nWhen pawn crosses board enter move as: \ncurrent position + next position + piece pawn turns into (i.e. a7a8b) [piece moves from a7 to a8 and turns into bishop]') 
+    print('Instructions: \nEnter move as: \ncurrent position + next position \nExample: e2e4 -> piece moves from e2 to e4 \n\nWhen move requires pawn promotion enter move as: \ncurrent position + next position + piece pawn is promoted to \nExample: a7a8b -> piece moves from a7 to a8 and turns into bishop\n\n\n') 
     print('Turn ' + str(turn_counter) + '\n')
     print(board)
 
@@ -210,6 +199,7 @@ def runGame():
         if move in ourPossibleMoves:
             pass
         while move not in ourPossibleMoves:
+            print("Valid Moves: ")
             print(ourPossibleMoves)
             move = input("Enter a valid move: ")
 
@@ -224,7 +214,7 @@ def runGame():
         lookAheadFen = chessgame.get_fen() #user's fen if user's move is made
         lookAheadFen = list(lookAheadFen)
         changeFenWB(lookAheadFen)
-                 
+
         lookAheadFen = "".join(lookAheadFen)  #recreates fen
 
         chessgame.set_fen(lookAheadFen)
@@ -243,32 +233,32 @@ def runGame():
         turn_counter += 1
         print('\nTurn ' + str(turn_counter) + ' - white (player) moved\n')
         print(board)
+        
 
         checkStatus()
-
-        print("Thinking...\n")
-        #time.sleep(3)
-
+        print("AI is thinking...")
 
         ourPossibleMoves = chessgame.get_moves('b')
         #call minimax HERE
-        for move in ourPossibleMoves:  #
+        for move in ourPossibleMoves:  
             originNode = Node(move)
-            for humanMove in chessgame.get_moves('w'):
-                originNode.children = HumanNextMoves[humanMove]
-                originNode.isLeaf = False  #sets isLeaf equal to false because has children
+            for key in HumanNextMoves:  ##WHAT DOES THIS DO?
+                originNode.children = HumanNextMoves[key]  ###WHAT IS THE PURPOSE OF THIS LINE. Should it not be +=?
+            originNode.setIsLeaf() #sets isLeaf equal to false because has children
             #minimax(originMove, depthLevel, maximizingPlayer)
+
             bestValue = minimax(originNode, 2, True)  #passed in Node *CHANGED*
             bestMove = findMoveBasedonValue(bestValue, 'b')
         move = bestMove
-        print(move)
         #######move = random.choice(chessgame.get_moves())
         ##print('got past findbestMove!')
         ##print(move) ##### move should look something like this 'd7d6'
         chessgame.apply_move(move)
         board.updateBoard(str(chessgame))
         turn_counter += 1
-        print('Turn ' + str(turn_counter) + ' - black (AI) moved\n')
+        print('Turn ' + str(turn_counter) + ' - black (AI) made move ' + move + '\n')
         print(board)
+
+
 
 runGame()
