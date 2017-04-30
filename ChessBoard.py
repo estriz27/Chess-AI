@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+
 class ChessBoard:
 
     def __init__(self, width, height):
@@ -42,8 +43,6 @@ class ChessBoard:
 
     def readPieces(self,string):
         counter = 0
-        
-        
         for row in range(8):
             for col in range(8):
                 self.data[row][col] = string[counter]

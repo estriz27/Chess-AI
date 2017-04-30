@@ -3,6 +3,8 @@ from ChessBoard import *
 import time
 import random
 from Node import Node
+import sys
+from termcolor import colored, cprint
 
 
 
@@ -33,7 +35,8 @@ def checkStatus():
     if chessgame.status == 1:
         print("CHECK")
     if chessgame.status == 2:
-        print("CHECKMATE")
+        print(colored("CHECKMATE",'yellow'))
+        print(colored("GAME OVER",'yellow',attrs=['blink']))
     if chessgame.status ==3:
         print("STALEMATE")
 
@@ -179,12 +182,15 @@ def runGame():
     global HumanNextMoves
     global AINextMoves
 
+    
     turn_counter = 0
-    print("Welcome to Chess AI")
-    print('player is white (capital letters on bottom of board), AI is black (lowercase letters on top of board\n')
-    print('Instructions: \nEnter move as: \ncurrent position + next position \nExample: e2e4 -> piece moves from e2 to e4 \n\nWhen move requires pawn promotion enter move as: \ncurrent position + next position + piece pawn is promoted to \nExample: a7a8b -> piece moves from a7 to a8 and turns into bishop\n\n\n') 
+    cprint("Welcome to Chess AI","green")
+    cprint('player is white (capital letters on bottom of board), AI is black (lowercase letters on top of board\n','green')
+    print(colored('Instructions: \nEnter move as: \ncurrent position + next position \nExample: e2e4 -> piece moves from e2 to e4 \n\nWhen move requires pawn promotion enter move as: \ncurrent position + next position + piece pawn is promoted to \nExample: a7a8b -> piece moves from a7 to a8 and turns into bishop\n\n\n', 'cyan',attrs=['bold'])) 
     print('Turn ' + str(turn_counter) + '\n')
     print(board)
+
+
 
     #print all the moves with print(chessgame.get_moves('b'))  player is (chessgame.state.player)
     # MAIN GAME LOOP
