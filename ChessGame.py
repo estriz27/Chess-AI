@@ -212,9 +212,6 @@ def runGame():
     print("Welcome to Chess AI")
     print('player is white (capital letters on bottom of board), AI is black (lowercase letters on top of board\n')
     print('Instructions: \nEnter move as: \ncurrent position + next position \nExample: e2e4 -> piece moves from e2 to e4 \n\nWhen move requires pawn promotion enter move as: \ncurrent position + next position + piece pawn is promoted to \nExample: a7a8b -> piece moves from a7 to a8 and turns into bishop\n\n\n')
-    print('Turn ' + str(turn_counter) + '\n')
-    print("White Score: " +  str(whiteValue))
-    print("Black Score: " +  str(blackValue) + '\n')
 
     #Determine what chess agent the player wants to play against
     agent = input("What chess agent do you want to play against?(1 = easy (1 Ply Random Move) , 2 = medium (1 Ply Best Move), 3 = hard (2 Ply Minimax)\n")
@@ -230,6 +227,14 @@ def runGame():
                 break
             elif agent == "3":
                 break
+
+
+
+    print('Turn ' + str(turn_counter) + '\n')
+    print("White Score: " +  str(whiteValue))
+    print("Black Score: " +  str(blackValue) + '\n')
+
+ 
     print(board)
 
 
