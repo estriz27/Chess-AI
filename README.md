@@ -19,7 +19,7 @@ Our project is located at [Henry's chess-AI GitLab Repo](https://gitlab.bucknell
 git@gitlab.bucknell.edu:hbk001/chess-AI.git
 ```
 
-### Instructions
+## Instructions
 
 Player - white (capital letters on bottom of board)
 AI - black (lowercase letters on top of board)
@@ -47,7 +47,7 @@ Example: e2e4 -> piece moves from e2 to e4
 Example: a7a8b -> piece moves from a7 to a8 and turns into bishop
 ```
 
-### Algorithm
+## Algorithm
 
 Iteration 1
 * AI makes random moves (this was a vital first step so that a player can play against the AI)
