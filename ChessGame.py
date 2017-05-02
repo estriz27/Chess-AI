@@ -165,26 +165,26 @@ def findMoveBasedonValue(bestValue, player):
         if moves_dict[key] == bestValue:
             return key
 
-#This function implements a minimax AI to play against       
+#This function implements a minimax AI to play against
 def MinimaxAgent():
         ourPossibleMoves = chessgame.get_moves('b')
         for move in ourPossibleMoves:
             originNode = Node(move)
-            for key in HumanNextMoves: 
-                originNode.children = HumanNextMoves[key]  
+            for key in HumanNextMoves:
+                originNode.children = HumanNextMoves[key]
             originNode.setIsLeaf() #sets isLeaf equal to false or true depending on if node has children
             bestValue = minimax(originNode, 2, True)
             bestMove = findMoveBasedonValue(bestValue, 'b')
         move = bestMove
         return bestMove
-    
-#This function implements a 1 ply random move AI to play against 
+
+#This function implements a 1 ply random move AI to play against
 def RandomMoveAgent():
      ourPossibleMoves = chessgame.get_moves('b')
      move = random.choice(ourPossibleMoves)
      return move
 
-#This function implements a 1 ply best move AI to play against 
+#This function implements a 1 ply best move AI to play against
 def BestMoveAgent():
      ourPossibleMoves = chessgame.get_moves('b')
      bestMoveValue = findBestMove('b')
@@ -209,16 +209,16 @@ def runGame():
     blackValue = 0
 
     turn_counter = 0
-    print("Welcome to Chess AI")
-    print('player is white (capital letters on bottom of board), AI is black (lowercase letters on top of board\n')
-    print('Instructions: \nEnter move as: \ncurrent position + next position \nExample: e2e4 -> piece moves from e2 to e4 \n\nWhen move requires pawn promotion enter move as: \ncurrent position + next position + piece pawn is promoted to \nExample: a7a8b -> piece moves from a7 to a8 and turns into bishop\n\n\n')
+    print("\n\n\nWelcome to Chess AI")
+    print('Player is white (capital letters on bottom of board), AI is black (lowercase letters on top of board\n')
+    print('Instructions: \nEnter move as: \ncurrent position + next position \nExample: e2e4 -> piece moves from e2 to e4 \n\nWhen move requires pawn promotion enter move as: \ncurrent position + next position + piece pawn is promoted to \nExample: a7a8b -> piece moves from a7 to a8 and turns into bishop\n\n')
 
     #Determine what chess agent the player wants to play against
-    agent = input("What chess agent do you want to play against?(1 = easy (1 Ply Random Move) , 2 = medium (1 Ply Best Move), 3 = hard (2 Ply Minimax)\n")
+    agent = input("What chess agent do you want to play against?\n(1 = easy (1-Ply Random Move), 2 = medium (1-Ply Best Move), 3 = hard (2-Ply Minimax)\nEnter (1,2,or 3): ")
     if agent == "1" or agent == "2" or agent == "3":
         pass
     else:
-        
+
         while True:
             agent = str(input("Error: Please Choose Agent [1 = easy (1 Ply Random Move) , 2 = medium (1 Ply Best Move), 3 = hard (2 Ply Minimax)]\n"))
             if agent == "1":
@@ -234,7 +234,7 @@ def runGame():
     print("White Score: " +  str(whiteValue))
     print("Black Score: " +  str(blackValue) + '\n')
 
- 
+
     print(board)
 
 
@@ -288,9 +288,9 @@ def runGame():
         checkStatus() #checks whether there is a check, checkmate, or stalemate, and prints the corresponding message
         print("AI is thinking...\n")
 
-        
+
         move = agentMove(agent)  #AI move based on what agent was selected
-    
+
         blackValue += findMoveValue(move)  #Keeps track of how many points the black (AI) player has
         chessgame.apply_move(move) #Applies the move to the board
         board.updateBoard(str(chessgame)) #Updates the GUI
