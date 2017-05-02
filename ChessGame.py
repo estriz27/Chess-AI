@@ -61,6 +61,7 @@ def findBestMove(player):
     possible_moves = chessgame.get_moves(player)
 
     #updates dictionary
+    #point values are based on actual chess rules
     piece_values = {'p': 1, 'b': 3, 'n': 3, 'r': 5, 'q': 9, 'k': 200, ' ': 0}
     moves_dict = {} # {'e2e4': 0, 'f4f5': 3 ...}
     for move in possible_moves:
@@ -93,33 +94,12 @@ def findBestMove(player):
 # check in second half of string if empty space or piece
 # if empty space 0 points, if piece get piece value from above
 # store move and point value for each move into moves_dict (dictionary)
-
-
-
-############################### 1-PLY #####################################
-##    evaluation = 0
-##    evaluation = maxi(0)
-
-######## everything below here in this function is basically the "evaluate()" function needed above....
-
-
-# print('the array of good moves is ' + str(goodMovesArray) + '\n')
-# if not goodMovesArray:
-#     pass
-# else:
-#     bestMove = random.choice(goodMovesArray)
-#
-# if str(bestMove) == '0':
-#     bestMove = random.choice(chessgame.get_moves())
-# print('the best move selected is ' + str(bestMove) + '\n')
-# return str(bestMove)
 '''
 
 #This function generates a dictionary where the keys are the 1 ply moves, and the value at the key are the 2 ply moves that stem from the key move
 def lookAhead(player):
     #create dictionary for 2-ply moves
     secondLayerMoves = {}
-
     currentFen = chessgame.get_fen()
 
     for move in chessgame.get_moves(player):
@@ -205,20 +185,23 @@ def runGame():
     global HumanNextMoves
     global AINextMoves
 
+    #set initial values
     whiteValue = 0
     blackValue = 0
-
     turn_counter = 0
+
+    #initial print statements
     print("\n\n\nWelcome to Chess AI")
     print('Player is white (capital letters on bottom of board), AI is black (lowercase letters on top of board\n')
     print('Instructions: \nEnter move as: \ncurrent position + next position \nExample: e2e4 -> piece moves from e2 to e4 \n\nWhen move requires pawn promotion enter move as: \ncurrent position + next position + piece pawn is promoted to \nExample: a7a8b -> piece moves from a7 to a8 and turns into bishop\n\n')
 
     #Determine what chess agent the player wants to play against
-    agent = input("What chess agent do you want to play against?\n(1 = easy (1-Ply Random Move), 2 = medium (1-Ply Best Move), 3 = hard (2-Ply Minimax)\nEnter (1,2,or 3): ")
+    #choose between our 3 agents
+    #note minimax will take longer to compute, but is our smartest agent
+    agent = input("What chess agent do you want to play against?\n1 = easy (1-Ply Random Move), 2 = medium (1-Ply Best Move), 3 = hard (2-Ply Minimax)\nEnter (1,2,or 3): ")
     if agent == "1" or agent == "2" or agent == "3":
         pass
     else:
-
         while True:
             agent = str(input("Error: Please Choose Agent [1 = easy (1 Ply Random Move) , 2 = medium (1 Ply Best Move), 3 = hard (2 Ply Minimax)]\n"))
             if agent == "1":
@@ -228,16 +211,10 @@ def runGame():
             elif agent == "3":
                 break
 
-
-
     print('Turn ' + str(turn_counter) + '\n')
     print("White Score: " +  str(whiteValue))
     print("Black Score: " +  str(blackValue) + '\n')
-
-
     print(board)
-
-
 
     #print all the moves with print(chessgame.get_moves('b'))  player is (chessgame.state.player)
     # MAIN GAME LOOP
@@ -256,13 +233,10 @@ def runGame():
             print(ourPossibleMoves)
             move = input("Enter a valid move: ")
 
-
         #white player (user) makes move
         whiteValue += findMoveValue(move) #Keeps track of how many points the white (human) player has
         chessgame.apply_move(move) #Applies the move to the board
         board.updateBoard(str(chessgame)) #Updates the GUI
-
-
 
         #this handles setting humanNextMoves. ChessNut makes it very difficult to lookahead after you make your turn. This gets around that issue by saving the FEN, creating an artificial fen to get next moves, then resetting the original FEN
         currFen = chessgame.get_fen()
@@ -288,7 +262,6 @@ def runGame():
         checkStatus() #checks whether there is a check, checkmate, or stalemate, and prints the corresponding message
         print("AI is thinking...\n")
 
-
         move = agentMove(agent)  #AI move based on what agent was selected
 
         blackValue += findMoveValue(move)  #Keeps track of how many points the black (AI) player has
@@ -299,7 +272,7 @@ def runGame():
         print("White Score: " +  str(whiteValue))
         print("Black Score: " +  str(blackValue) + '\n')
         print(board)
-
+    #end of runGame function
 
 
 runGame()
