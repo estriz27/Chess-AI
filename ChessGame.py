@@ -1,6 +1,5 @@
 from Chessnut import Game
 from ChessBoard import *
-import time
 import random
 from Node import Node
 
