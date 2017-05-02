@@ -30,7 +30,7 @@ AI - black (lowercase letters on top of board)
 python3 ChessGame.py
 ```
 
-* Choose the chess agent that you want to play against: Enter "1" for easy (1 Ply Random Move) "2" for medium (1 Ply Best Move) "3 for hard (2 Ply Minimax)
+* Choose the chess agent that you want to play against: Enter "1" for easy (1 Ply Random Move), "2" for medium (1 Ply Best Move), and "3" for hard (2 Ply Minimax)
 ```
 Example: What chess agent do you want to play against?(1 = easy (1 Ply Random Move) , 2 = medium (1 Ply Best Move), 3 = hard (2 Ply Minimax)
 3
