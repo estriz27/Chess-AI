@@ -119,7 +119,8 @@ def changeFenWB(lookAheadFen):
             break
     return lookAheadFen
 
-#This function returns point value for specific move, used for white player only
+#This function returns point value for specific move
+#used for scoring points for both players
 def findMoveValue(move):
     piece_values = {'p': 1, 'b': 3, 'n': 3, 'r': 5, 'q': 9, 'k': 200, ' ': 0}
     space_moving_to = move[2:] # 'a6'
