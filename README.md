@@ -71,6 +71,16 @@ Iteration 3
 * Sweat
 * Tears
 
+## Next Steps
+
+GUI
+* Colors to easily differentiate between players (for a black background, can be blue and red for simplicity)
+* Actual chess pieces, spacing is difficult from past implementation
+
+Algorithms
+* Minimax Depth of 3 -- computation would take too long
+* Alpha Beta Pruning -- would take care of computation time issues
+
 ## Authors
 
 * **Henry Kwan**
