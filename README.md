@@ -1,4 +1,6 @@
-# Project Title
+# Chess AI, an intelligent computer that you can play chess with!
+## By Henry Kwan, Elias Strizower, and Alex Godziela
+
 What is Chess?
 
 
