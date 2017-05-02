@@ -5,9 +5,6 @@ import random
 from Node import Node
 
 
-
-
-
 ################ GLOBAL VARIABLES ########################################
 
 board = ChessBoard(8,8)
@@ -20,8 +17,6 @@ AINextMoves = {}
 ##chessgame = Game(fen='rnbqkbnr/p1pppppp/8/1p6/2P5/8/PP1PPPPP/RNBQKBNR w KQkq b6 0 2')
 ##board = ChessBoard(8,8)
 board.updateBoard(str(chessgame))
-
-
 
 
 """
@@ -155,8 +150,16 @@ def changeFenWB(lookAheadFen):
             break
     return lookAheadFen
 
+#returns point value for specific move, used for white player only
+def findMoveValue(move):
+    piece_values = {'p': 1, 'b': 3, 'n': 3, 'r': 5, 'q': 9, 'k': 200, ' ': 0}
+    space_moving_to = move[2:] # 'a6'
+    piece = board.lookupPiece(space_moving_to) #string
+    piece = piece.lower()
+    pieceValue = piece_values[piece] #int
+    return pieceValue
 
-
+#sounds confusing, but finds key (move) based on value (points)
 def findMoveBasedonValue(bestValue, player):
     piece_values = {'p': 1, 'b': 3, 'n': 3, 'r': 5, 'q': 9, 'k': 200, ' ': 0}
 
@@ -178,12 +181,16 @@ def runGame():
     global HumanNextMoves
     global AINextMoves
 
+    whiteValue = 0
+    blackValue = 0
 
     turn_counter = 0
     print("Welcome to Chess AI")
     print('player is white (capital letters on bottom of board), AI is black (lowercase letters on top of board\n')
     print('Instructions: \nEnter move as: \ncurrent position + next position \nExample: e2e4 -> piece moves from e2 to e4 \n\nWhen move requires pawn promotion enter move as: \ncurrent position + next position + piece pawn is promoted to \nExample: a7a8b -> piece moves from a7 to a8 and turns into bishop\n\n\n')
     print('Turn ' + str(turn_counter) + '\n')
+    print("White Score: " +  str(whiteValue))
+    print("Black Score: " +  str(blackValue) + '\n')
     print(board)
 
 
@@ -207,8 +214,10 @@ def runGame():
 
 
         #white player (user) makes move
+        whiteValue += findMoveValue(move)
         chessgame.apply_move(move)
         board.updateBoard(str(chessgame))
+
 
 
         #this handles setting humanNextMoves DONT COMMENT IT!!!
@@ -234,11 +243,14 @@ def runGame():
         board.updateBoard(str(chessgame))
         turn_counter += 1
         print('\nTurn ' + str(turn_counter) + ' - white (player) moved\n')
+        print("White Score: " +  str(whiteValue))
+        print("Black Score: " +  str(blackValue) + '\n')
         print(board)
 
 
+
         checkStatus()
-        print("AI is thinking...")
+        print("AI is thinking...\n")
 
         ourPossibleMoves = chessgame.get_moves('b')
         #call minimax HERE
@@ -256,6 +268,7 @@ def runGame():
             bestValue = minimax(originNode, 2, True)  #passed in Node *CHANGED*
             bestMove = findMoveBasedonValue(bestValue, 'b')
         move = bestMove
+        blackValue += findMoveValue(move)
         #######move = random.choice(chessgame.get_moves())
         ##print('got past findbestMove!')
         ##print(move) ##### move should look something like this 'd7d6'
@@ -263,6 +276,8 @@ def runGame():
         board.updateBoard(str(chessgame))
         turn_counter += 1
         print('Turn ' + str(turn_counter) + ' - black (AI) made move ' + move + '\n')
+        print("White Score: " +  str(whiteValue))
+        print("Black Score: " +  str(blackValue) + '\n')
         print(board)
 
 
