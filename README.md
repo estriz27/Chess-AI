@@ -47,22 +47,32 @@ Example: e2e4 -> piece moves from e2 to e4
 Example: a7a8b -> piece moves from a7 to a8 and turns into bishop
 ```
 
-## Algorithm
+## Architecture and Development Process
 
-Iteration 1
+####Iteration 1
 * AI makes random moves (this was a vital first step so that a player can play against the AI)
 
 
-Iteration 2
+####Iteration 2
 * Implemented basic heuristics
 * Each move is assigned a point value
 * AI makes move with highest point value (Kind of like a Greedy Algorithm)
 
 
-Iteration 3
+####Iteration 3
 * Minimax Algorithm - maximizes AI point value and minimizes opponent's point value based on AI's move
 * 2-ply deep (Depth of 2)
 * Looks 2 moves ahead to pick best move
+
+## Next Steps
+
+####GUI
+* Colors to easily differentiate between players (for a black background, can be blue and red for simplicity)
+* Actual chess pieces, spacing is difficult from past implementation
+
+####Algorithms
+* Minimax Depth of 3 -- computation would take too long
+* Alpha Beta Pruning -- would take care of computation time issues
 
 ## Built With
 
@@ -70,16 +80,6 @@ Iteration 3
 * Blood
 * Sweat
 * Tears
-
-## Next Steps
-
-GUI
-* Colors to easily differentiate between players (for a black background, can be blue and red for simplicity)
-* Actual chess pieces, spacing is difficult from past implementation
-
-Algorithms
-* Minimax Depth of 3 -- computation would take too long
-* Alpha Beta Pruning -- would take care of computation time issues
 
 ## Authors
 
