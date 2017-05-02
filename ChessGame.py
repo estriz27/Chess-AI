@@ -5,9 +5,6 @@ import random
 from Node import Node
 
 
-
-
-
 ################ GLOBAL VARIABLES ########################################
 
 board = ChessBoard(8,8)
@@ -20,8 +17,6 @@ AINextMoves = {}
 ##chessgame = Game(fen='rnbqkbnr/p1pppppp/8/1p6/2P5/8/PP1PPPPP/RNBQKBNR w KQkq b6 0 2')
 ##board = ChessBoard(8,8)
 board.updateBoard(str(chessgame))
-
-
 
 
 """
@@ -49,7 +44,7 @@ def printplayer():
 
 def minimax(node, depth, maximizingPlayer):
     if depth == 0 or node.leaf == True:
-        heuristicValue = findBestMove()  #best move for what player?
+        heuristicValue = findBestMove()  #best move for AI
         return heuristicValue
 
     #maximizingPlayer -AI
@@ -70,34 +65,8 @@ def minimax(node, depth, maximizingPlayer):
 
 
 #this function is simply a heuristic to get the move with the highest point value
-#won't be used if we're using minimax
 def findBestMove():
-
-    # finds all possible moves at moment for playerColor (black or white)
-    # returns an array of every move you can possible make at the moment
-    # each array element is of the form 'e2e4' where the first two characters are where you ar moving from
-    # and the second two characters are where you are moving to
-
     possible_moves = chessgame.get_moves('b')
-
-    # parse what is on each of the spaces in possible_moves (piece or no piece)
-    # possible_moves example = ['e2e4', 'f2f4', etc]
-    # check in second half of string if empty space or piece
-    # if empty space 0 points, if piece get piece value from above
-    # store move and point value for each move into moves_dict (dictionary)
-
-    '''
-    http://stackoverflow.com/questions/268272/getting-key-with-maximum-value-in-dictionary
-    import operator
-  	stats = {'a':1000, 'b':3000, 'c': 100}
-  	max(stats.iteritems(), key=operator.itemgetter(1))[0]
-    '''
-
-    ############################### 1-PLY #####################################
-##    evaluation = 0
-##    evaluation = maxi(0)
-
-    ######## everything below here in this function is basically the "evaluate()" function needed above....
 
     #updates dictionary
     piece_values = {'p': 1, 'b': 3, 'n': 3, 'r': 5, 'q': 9, 'k': 200, ' ': 0}
@@ -108,8 +77,7 @@ def findBestMove():
         piece = piece.lower()
         pieceValue = piece_values[piece] #int
         moves_dict[move] = pieceValue  #dictionary['new_key'] = value
-    #print('the move dictionary (key is space and value is piece value of space) is: ' + str(moves_dict) + '\n')
-    
+
     #find key of max value in dictionary
     bestMove = 0 #returns ie. 'e2e4'
     goodMovesArray = []
@@ -120,17 +88,40 @@ def findBestMove():
             maxValue = moves_dict[key]
     return maxValue
 
-    # print('the array of good moves is ' + str(goodMovesArray) + '\n')
-    # if not goodMovesArray:
-    #     pass
-    # else:
-    #     bestMove = random.choice(goodMovesArray)
-    #
-    # if str(bestMove) == '0':
-    #     bestMove = random.choice(chessgame.get_moves())
-    # print('the best move selected is ' + str(bestMove) + '\n')
-    # return str(bestMove)
 
+'''Comments for how findBestMove works
+
+# finds all possible moves at moment for AI
+# returns an array of every move you can possible make at the moment
+# each array element is of the form 'e2e4' where the first two characters are where you ar moving from
+# and the second two characters are where you are moving to
+
+# parse what is on each of the spaces in possible_moves (piece or no piece)
+# possible_moves example = ['e2e4', 'f2f4', etc]
+# check in second half of string if empty space or piece
+# if empty space 0 points, if piece get piece value from above
+# store move and point value for each move into moves_dict (dictionary)
+
+
+
+############################### 1-PLY #####################################
+##    evaluation = 0
+##    evaluation = maxi(0)
+
+######## everything below here in this function is basically the "evaluate()" function needed above....
+
+
+# print('the array of good moves is ' + str(goodMovesArray) + '\n')
+# if not goodMovesArray:
+#     pass
+# else:
+#     bestMove = random.choice(goodMovesArray)
+#
+# if str(bestMove) == '0':
+#     bestMove = random.choice(chessgame.get_moves())
+# print('the best move selected is ' + str(bestMove) + '\n')
+# return str(bestMove)
+'''
 
 
 def lookAhead(player):
@@ -158,12 +149,20 @@ def changeFenWB(lookAheadFen):
             lookAheadFen[-x] = 'w'
             break
     return lookAheadFen
-  
-     
 
+#returns point value for specific move, used for white player only
+def findMoveValue(move):
+    piece_values = {'p': 1, 'b': 3, 'n': 3, 'r': 5, 'q': 9, 'k': 200, ' ': 0}
+    space_moving_to = move[2:] # 'a6'
+    piece = board.lookupPiece(space_moving_to) #string
+    piece = piece.lower()
+    pieceValue = piece_values[piece] #int
+    return pieceValue
+
+#sounds confusing, but finds key (move) based on value (points)
 def findMoveBasedonValue(bestValue, player):
     piece_values = {'p': 1, 'b': 3, 'n': 3, 'r': 5, 'q': 9, 'k': 200, ' ': 0}
-    
+
     possible_moves = chessgame.get_moves(player)
     moves_dict = {} # {'e2e4': 0, 'f4f5': 3 ...}
     #populates dictionary
@@ -182,12 +181,16 @@ def runGame():
     global HumanNextMoves
     global AINextMoves
 
-    
+    whiteValue = 0
+    blackValue = 0
+
     turn_counter = 0
     print("Welcome to Chess AI")
     print('player is white (capital letters on bottom of board), AI is black (lowercase letters on top of board\n')
-    print('Instructions: \nEnter move as: \ncurrent position + next position \nExample: e2e4 -> piece moves from e2 to e4 \n\nWhen move requires pawn promotion enter move as: \ncurrent position + next position + piece pawn is promoted to \nExample: a7a8b -> piece moves from a7 to a8 and turns into bishop\n\n\n') 
+    print('Instructions: \nEnter move as: \ncurrent position + next position \nExample: e2e4 -> piece moves from e2 to e4 \n\nWhen move requires pawn promotion enter move as: \ncurrent position + next position + piece pawn is promoted to \nExample: a7a8b -> piece moves from a7 to a8 and turns into bishop\n\n\n')
     print('Turn ' + str(turn_counter) + '\n')
+    print("White Score: " +  str(whiteValue))
+    print("Black Score: " +  str(blackValue) + '\n')
     print(board)
 
 
@@ -211,8 +214,10 @@ def runGame():
 
 
         #white player (user) makes move
+        whiteValue += findMoveValue(move)
         chessgame.apply_move(move)
         board.updateBoard(str(chessgame))
+
 
 
         #this handles setting humanNextMoves DONT COMMENT IT!!!
@@ -238,28 +243,32 @@ def runGame():
         board.updateBoard(str(chessgame))
         turn_counter += 1
         print('\nTurn ' + str(turn_counter) + ' - white (player) moved\n')
+        print("White Score: " +  str(whiteValue))
+        print("Black Score: " +  str(blackValue) + '\n')
         print(board)
-        
+
+
 
         checkStatus()
-        print("AI is thinking...")
+        print("AI is thinking...\n")
 
         ourPossibleMoves = chessgame.get_moves('b')
         #call minimax HERE
-        for move in ourPossibleMoves:  
+        for move in ourPossibleMoves:
             originNode = Node(move)
             for key in HumanNextMoves:  ##WHAT DOES THIS DO? Please look
                 originNode.children = HumanNextMoves[key]  ###WHAT IS THE PURPOSE OF THIS LINE. Should it not be +=?
             #Previous code:
             #for humanMove in chessgame.get_moves('w'):
             #       originNode.children = HumanNextMoves[humanMove]
-                
+
             originNode.setIsLeaf() #sets isLeaf equal to false or true depending on if node has children
             #minimax(originMove, depthLevel, maximizingPlayer)
 
             bestValue = minimax(originNode, 2, True)  #passed in Node *CHANGED*
             bestMove = findMoveBasedonValue(bestValue, 'b')
         move = bestMove
+        blackValue += findMoveValue(move)
         #######move = random.choice(chessgame.get_moves())
         ##print('got past findbestMove!')
         ##print(move) ##### move should look something like this 'd7d6'
@@ -267,6 +276,8 @@ def runGame():
         board.updateBoard(str(chessgame))
         turn_counter += 1
         print('Turn ' + str(turn_counter) + ' - black (AI) made move ' + move + '\n')
+        print("White Score: " +  str(whiteValue))
+        print("Black Score: " +  str(blackValue) + '\n')
         print(board)
 
 
